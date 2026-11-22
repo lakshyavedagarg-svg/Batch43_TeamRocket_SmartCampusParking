@@ -551,8 +551,23 @@ Available Slots : 8
 ```
 
 ---
+---
 
-## 16. Limitations
+## 16. Program Flowchart
+
+The following flowchart represents the overall working of the Smart Campus Parking System.
+
+![Smart Campus Parking System Flowchart](flowchart.png)
+
+---
+
+## 17. Project Files
+
+- [View Program Flowchart](flowchart.png)
+- [Download Project Presentation](presentation.pptx)
+
+---
+## 18. Limitations
 
 The current program is designed as a simple first-year C programming project.
 
@@ -564,7 +579,7 @@ The current program is designed as a simple first-year C programming project.
 
 ---
 
-## 17. Conclusion
+## 19. Conclusion
 
 The Smart Campus Parking System demonstrates how fundamental C programming concepts can be applied to a practical campus parking problem.
 
