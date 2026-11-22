@@ -1,0 +1,6 @@
+# Compiled C executables
+smart_campus_parking
+*.exe
+
+# macOS
+.DS_Store
