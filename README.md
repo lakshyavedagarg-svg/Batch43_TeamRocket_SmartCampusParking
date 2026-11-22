@@ -557,14 +557,14 @@ Available Slots : 8
 
 The following flowchart represents the overall working of the Smart Campus Parking System.
 
-![Smart Campus Parking System Flowchart](flowchart.png)
+![Smart Campus Parking System Flowchart](Flowchart.png)
 
 ---
 
 ## 17. Project Files
 
-- [View Program Flowchart](flowchart.png)
-- [Download Project Presentation](presentation.pptx)
+- [View Program Flowchart](Flowchart.png)
+- [Download Project Presentation](Presentation.pptx)
 
 ---
 ## 18. Limitations
