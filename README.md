@@ -1,600 +1,531 @@
 # Smart Campus Parking System
 
-## C Programming Mini Hackathon
+A menu-driven **Smart Campus Parking System developed in C** for the C Programming Mini Hackathon.
+
+The system manages vehicle entry and exit, tracks parking availability, supports cars and bikes with different parking rates, calculates parking duration using HH:MM time, provides a **simulated FASTag/Cash payment workflow**, and stores completed parking records using C file handling.
+
+---
+
+## Team Details
 
 **Team Name:** Team Rocket  
 **Batch:** 43  
-**Problem Statement:** Problem Statement 5 - Smart Campus Parking System
+**Problem Statement:** 5 — Smart Campus Parking System
 
-## Team Members
-
-| Name | SAP ID |
-|---|---|
+| Team Member | SAP ID |
+|---|---:|
 | Lakshya Garg | 590039884 |
-| Nishchal Khatri | 590038447 |
+| Nishchal Khati | 590038447 |
 | Sanskar Singh | 590038463 |
 
 ---
 
-## 1. Problem Statement
+## Objective
 
-Design a parking management program that tracks vehicle entry, exit, and available parking spaces.
-
-The system maintains a fixed number of parking spaces, records vehicle registration numbers and entry times, calculates parking charges based on parking duration, prevents duplicate vehicle entry, and reports when the parking area is full.
+The objective is to develop a practical parking-management prototype using fundamental C programming concepts. The system manages vehicle entry and exit, tracks occupied and available slots, prevents duplicate entries, detects a full parking area, supports cars and bikes, calculates parking charges, and stores completed transactions using file handling.
 
 ---
 
-## 2. Objective
+## Features
 
-The objective of this project is to develop a simple menu-driven Smart Campus Parking System using C programming.
+- 10 fixed parking slots
+- Vehicle Entry and Vehicle Exit
+- Search Vehicle
+- Display Parking Status
+- View Parking History
+- Duplicate-entry prevention
+- Parking-full detection
+- Car and Bike support
+- **Car rate:** Rs. 20/hour
+- **Bike rate:** Rs. 10/hour
+- HH:MM entry and exit time
+- Every started hour charged as a complete hour
+- Simulated FASTag/Cash payment
+- File handling using `parking_records.txt`
 
-The program helps manage a campus parking area by:
-
-- Recording vehicle entry.
-- Assigning an available parking slot.
-- Recording the entry time of a vehicle.
-- Preventing duplicate vehicle entries.
-- Tracking occupied and available parking spaces.
-- Searching for a parked vehicle.
-- Processing vehicle exit.
-- Calculating parking duration and parking charges.
-- Making the parking slot available again after vehicle exit.
-- Displaying a message when the parking area is full.
-
----
-
-## 3. Features
-
-### Vehicle Entry
-
-The user enters a vehicle registration number and entry time. The program automatically searches for the first available parking slot and assigns it to the vehicle.
-
-### Duplicate Entry Prevention
-
-Before parking a vehicle, the program checks whether the same vehicle registration number is already present.
-
-If it is already parked, the program displays:
-
-```text
-Vehicle is already parked!
-```
-
-### Parking Full Detection
-
-The system maintains a maximum of 10 parking spaces.
-
-If all parking spaces are occupied, the program displays:
-
-```text
-PARKING FULL!
-```
-
-### Vehicle Exit
-
-The user enters the registration number of the parked vehicle and its exit time.
-
-The program calculates:
-
-```text
-Parking Duration = Exit Time - Entry Time
-```
-
-### Parking Charge
-
-The parking rate used in the program is:
-
-```text
-Rs. 20 per hour
-```
-
-The charge is calculated using:
-
-```text
-Parking Charge = Parking Duration x Rate Per Hour
-```
-
-A minimum duration of one hour is considered for calculating the parking charge.
-
-### Search Vehicle
-
-The user can search for a vehicle using its registration number.
-
-If found, the program displays:
-
-- Vehicle registration number
-- Parking slot
-- Entry time
-- Current status
-
-### Parking Status
-
-The program displays all 10 parking spaces and shows whether each slot is:
-
-```text
-OCCUPIED
-```
-
-or:
-
-```text
-AVAILABLE
-```
-
-It also displays the total number of occupied and available parking spaces.
+> **Note:** FASTag payment is simulated. The program is not connected to the real FASTag/NPCI/banking network.
 
 ---
 
-## 4. C Programming Concepts Used
+## Main Menu
 
-The project uses the following C programming concepts:
-
-- Variables and constants
-- Data types
-- Operators
-- Conditional statements (`if`, `else`)
-- `switch` statement
-- `for` loops
-- `do-while` loop
-- Arrays
-- Character arrays and strings
-- Structures
-- Array of structures
-- Functions
-- Function prototypes
-- String functions such as `strcmp()` and `strcpy()`
+```text
+1. Vehicle Entry
+2. Vehicle Exit
+3. Search Vehicle
+4. Display Parking Status
+5. View Parking History
+6. Exit
+```
 
 ---
 
-## 5. Data Structure Used
+## Data Structure Used
 
-A structure named `ParkingSlot` is used to store the information related to each parking space.
+Each parking slot is represented using a structure:
 
 ```c
 struct ParkingSlot
 {
     char vehicleNumber[20];
-    int entryTime;
+    char vehicleType[10];
+    int entryHour;
+    int entryMinute;
     int occupied;
+    int hasFastag;
 };
 ```
 
-Each parking slot stores:
-
-- `vehicleNumber` - registration number of the parked vehicle.
-- `entryTime` - time at which the vehicle entered.
-- `occupied` - current status of the parking slot.
-
-The value of `occupied` is used as:
-
-```text
-0 = Available
-1 = Occupied
-```
-
-An array of structures represents the complete parking area:
-
-```c
-struct ParkingSlot parking[MAX_SLOTS];
-```
-
-The program uses 10 parking slots.
+An array of 10 structures represents the complete parking area. `occupied = 0` means available and `occupied = 1` means occupied.
 
 ---
 
-## 6. Algorithm
+## C Concepts Used
 
-1. Start the program.
-2. Create an array of 10 parking slots.
-3. Initialize the `occupied` status of every parking slot to `0`.
-4. Display the main menu.
-5. Accept the user's choice.
-6. If the user selects **Vehicle Entry**:
-   - Accept the vehicle registration number.
-   - Check whether the vehicle is already parked.
-   - If already parked, display an error message.
-   - Search for the first available parking slot.
-   - If no slot is available, display `PARKING FULL`.
-   - Accept and validate the entry time.
-   - Store the vehicle registration number and entry time.
-   - Mark the selected parking slot as occupied.
-7. If the user selects **Vehicle Exit**:
-   - Accept the vehicle registration number.
-   - Search for the vehicle.
-   - If the vehicle is not found, display an error message.
-   - Accept and validate the exit time.
-   - Calculate the parking duration.
-   - Calculate the parking charge.
-   - Display the parking receipt.
-   - Mark the parking slot as available.
-8. If the user selects **Search Vehicle**:
-   - Accept the vehicle registration number.
-   - Search through the occupied parking slots.
-   - Display the vehicle information if found.
-   - Otherwise, display `Vehicle not found`.
-9. If the user selects **Display Parking Status**:
-   - Check every parking slot.
-   - Display whether each slot is occupied or available.
-   - Count and display the occupied and available spaces.
-10. Repeat the menu until the user selects **Exit**.
-11. Stop.
+Structures, arrays, strings, functions, loops, `if-else`, `switch`, `strcmp()`, `strcpy()`, and file handling using `FILE *`, `fopen()`, `fprintf()`, `fgetc()`, and `fclose()`.
 
 ---
 
-## 7. Pseudocode
+## Program Workflow
 
-```text
-START
+### Vehicle Entry
 
-Create parking array with 10 slots
+1. Accept the vehicle registration number.
+2. Check whether the vehicle is already parked.
+3. Search for the first available slot.
+4. Select Car or Bike.
+5. Enter and validate the HH:MM entry time.
+6. Enter FASTag availability.
+7. Store the vehicle details and set `occupied = 1`.
 
-FOR every parking slot
-    Set occupied = 0
-END FOR
+### Vehicle Exit
 
-DO
-
-    Display main menu
-    Input choice
-
-    SWITCH choice
-
-        CASE 1: VEHICLE ENTRY
-
-            Input vehicle number
-
-            FOR every parking slot
-                IF slot is occupied AND vehicle number matches
-                    Display "Vehicle is already parked"
-                    Return to menu
-                END IF
-            END FOR
-
-            Search for first available slot
-
-            IF no available slot exists
-                Display "PARKING FULL"
-                Return to menu
-            END IF
-
-            Input entry time
-
-            IF entry time is invalid
-                Display error
-                Return to menu
-            END IF
-
-            Store vehicle number
-            Store entry time
-            Set occupied = 1
-
-            Display parking confirmation
-
-        CASE 2: VEHICLE EXIT
-
-            Input vehicle number
-            Search for vehicle
-
-            IF vehicle is not found
-                Display "Vehicle not found"
-                Return to menu
-            END IF
-
-            Input exit time
-
-            IF exit time is invalid
-                Display error
-                Return to menu
-            END IF
-
-            Calculate duration
-
-            IF duration = 0
-                Set duration = 1
-            END IF
-
-            Calculate parking charge
-            Display parking receipt
-            Set occupied = 0
-
-        CASE 3: SEARCH VEHICLE
-
-            Input vehicle number
-            Search all occupied slots
-
-            IF vehicle is found
-                Display vehicle details
-            ELSE
-                Display "Vehicle not found"
-            END IF
-
-        CASE 4: DISPLAY PARKING STATUS
-
-            FOR every parking slot
-
-                IF occupied = 1
-                    Display "OCCUPIED"
-                ELSE
-                    Display "AVAILABLE"
-                END IF
-
-            END FOR
-
-            Display total occupied slots
-            Display total available slots
-
-        CASE 5:
-
-            Display exit message
-
-        DEFAULT:
-
-            Display "Invalid choice"
-
-    END SWITCH
-
-WHILE choice is not 5
-
-STOP
-```
+1. Search for the vehicle by registration number.
+2. Enter and validate the HH:MM exit time.
+3. Convert entry and exit times into minutes.
+4. Calculate duration and billable hours.
+5. Apply the Car/Bike rate and calculate the charge.
+6. Select simulated FASTag or Cash payment.
+7. Display the receipt.
+8. Append the transaction to `parking_records.txt`.
+9. Set `occupied = 0` to free the slot.
 
 ---
 
-## 8. Program Functions
-
-The program is divided into four main functions.
-
-### `vehicleEntry()`
+## Parking Charge Calculation
 
 ```c
-void vehicleEntry(struct ParkingSlot parking[]);
+entryTotal = parking[slot].entryHour * 60 + parking[slot].entryMinute;
+exitTotal = exitHour * 60 + exitMinute;
+duration = exitTotal - entryTotal;
+
+billableHours = (duration + 59) / 60;
+charge = billableHours * rate;
 ```
 
-This function:
-
-- Accepts the vehicle registration number.
-- Checks for duplicate entry.
-- Searches for an empty parking slot.
-- Detects when the parking area is full.
-- Accepts the entry time.
-- Stores the vehicle information.
-- Marks the parking slot as occupied.
-
-### `vehicleExit()`
-
-```c
-void vehicleExit(struct ParkingSlot parking[]);
-```
-
-This function:
-
-- Searches for the vehicle.
-- Accepts the exit time.
-- Calculates the parking duration.
-- Calculates the parking charge.
-- Displays the parking receipt.
-- Makes the parking slot available again.
-
-### `searchVehicle()`
-
-```c
-void searchVehicle(struct ParkingSlot parking[]);
-```
-
-This function searches for a vehicle using its registration number and displays its parking details.
-
-### `displayParking()`
-
-```c
-void displayParking(struct ParkingSlot parking[]);
-```
-
-This function displays the status of every parking slot and the total number of occupied and available spaces.
+For example, a car parked from `07:38` to `19:55` stays for **12 hr 17 min**. This becomes **13 billable hours**, so the charge is **13 x Rs. 20 = Rs. 260**.
 
 ---
 
-## 9. Parking Charge Calculation
+## Detailed Program Flowchart
 
-The parking rate is defined using:
+The detailed flowchart contains the complete program logic, validations, payment selection, and file-handling flow.
 
-```c
-#define RATE_PER_HOUR 20
-```
-
-Parking duration is calculated using:
-
-```c
-duration = exitTime - parking[slot].entryTime;
-```
-
-The parking charge is calculated using:
-
-```c
-charge = duration * RATE_PER_HOUR;
-```
-
-### Example
-
-If a vehicle enters at:
-
-```text
-10:00
-```
-
-and exits at:
-
-```text
-14:00
-```
-
-then:
-
-```text
-Duration = 14 - 10
-         = 4 hours
-
-Parking Charge = 4 x 20
-               = Rs. 80
-```
+![Smart Campus Parking System Flowchart](flowchart.png)
 
 ---
 
-## 10. Compilation and Execution
+# Coding Screenshots
 
-The program can be compiled using Clang.
+Selected screenshots of the actual C source code are included below to explain the main implementation without reproducing every line of the program.
 
-### Compile
+## 1. Main Menu and Program Control
+
+![Main Menu and Switch Case](screenshots/code_main_menu.png)
+
+### What this code does
+
+The main menu is the control centre of the program. It is placed inside a `do-while` loop, which means the menu is displayed at least once and continues to appear until the user selects option `6`.
+
+The entered value is stored in `choice` and handled using a `switch` statement. Each case calls a separate function:
+
+- `vehicleEntry(parking)` — handles a new vehicle entering.
+- `vehicleExit(parking)` — handles exit, duration, billing and record storage.
+- `searchVehicle(parking)` — searches the occupied slots for a registration number.
+- `displayParking(parking)` — displays the status of all 10 slots.
+- `viewHistory()` — reads completed transactions from the record file.
+
+The `break` statement prevents execution from falling into the next case. The `default` case handles invalid menu choices.
+
+### Why this approach was used
+
+Separating each operation into a function keeps `main()` simple and makes the program modular. Instead of writing the complete parking logic inside one large function, `main()` only controls which operation should run.
+
+### C concepts demonstrated
+
+`do-while` loop • `switch-case` • functions • arrays passed to functions • input/output • modular programming
+
+---
+
+## 2. Vehicle Entry Logic
+
+![Vehicle Entry Logic](screenshots/code_vehicle_entry.png)
+
+### What this code does
+
+The Vehicle Entry function begins by accepting a registration number into `vehicleNumber`.
+
+The first `for` loop checks all 10 parking slots. A comparison is made only when a slot is already occupied:
+
+```c
+parking[i].occupied == 1
+```
+
+`strcmp()` then compares the stored registration number with the newly entered number. If `strcmp()` returns `0`, both strings are equal, so the vehicle is already inside the parking area. The program displays a warning and uses `return` to stop the entry operation immediately.
+
+If no duplicate is found, another loop searches for the first slot whose `occupied` value is `0`. Its index is stored in `slot`.
+
+`slot` is initially set to `-1`. Therefore, if it is still `-1` after checking all 10 slots, no empty slot was found and the program displays **PARKING FULL**.
+
+After an empty slot is found, the user selects:
+
+- Car or Bike
+- Entry hour and minute
+- FASTag availability
+
+The time is validated so the hour remains between `0–23` and the minute between `0–59`.
+
+The information is then stored inside the selected `ParkingSlot` structure and:
+
+```c
+parking[slot].occupied = 1;
+```
+
+marks the slot as occupied.
+
+### Why this approach was used
+
+The `occupied` flag allows one array to represent the complete parking lot. There is no need for a separate array of free slots. Duplicate checking also prevents the same registration number from occupying multiple slots.
+
+### C concepts demonstrated
+
+Array of structures • `for` loops • `if-else` • `strcmp()` • `strcpy()` • flags • validation • early `return`
+
+---
+
+## 3. Time, Rate and Charge Calculation
+
+![Time and Charge Calculation](screenshots/code_charge_calculation.png)
+
+### What this code does
+
+At exit, the program first validates the entered exit hour and minute.
+
+Both the entry and exit times are converted into **total minutes from midnight**:
+
+```c
+entryTotal = parking[slot].entryHour * 60
+             + parking[slot].entryMinute;
+
+exitTotal = exitHour * 60 + exitMinute;
+```
+
+This makes time subtraction straightforward:
+
+```c
+duration = exitTotal - entryTotal;
+```
+
+The exact duration can then be separated into hours and minutes using division and modulus:
+
+```c
+hours = duration / 60;
+minutes = duration % 60;
+```
+
+Because the project charges every **started hour** as a complete hour, billable hours are calculated as:
+
+```c
+billableHours = (duration + 59) / 60;
+```
+
+For example, `12 hr 17 min` becomes `13` billable hours.
+
+The program checks `vehicleType` using `strcmp()`:
+
+- Car → `CAR_RATE` = Rs. 20/hour
+- Bike → `BIKE_RATE` = Rs. 10/hour
+
+The final charge is:
+
+```c
+charge = billableHours * rate;
+```
+
+Finally, `hasFastag` determines the displayed payment mode. A value of `1` selects **FASTag (simulated)** and a value of `0` selects **Cash**.
+
+### Why this approach was used
+
+Working with total minutes avoids complicated separate hour/minute subtraction. The integer expression `(duration + 59) / 60` also rounds a partial hour upward without requiring the `math.h` library or `ceil()`.
+
+### C concepts demonstrated
+
+Arithmetic operators • integer division • modulus `%` • conditions • strings • constants • time validation • practical billing logic
+
+---
+
+## 4. File Handling
+
+![File Handling](screenshots/code_file_handling.png)
+
+### Saving completed transactions
+
+File handling gives the project a persistent record of vehicles that have completed their parking session.
+
+The program declares:
+
+```c
+FILE *fp;
+```
+
+`fp` is a **file pointer** used to access the opened file.
+
+When a vehicle exits successfully, the file is opened in append mode:
+
+```c
+fp = fopen("parking_records.txt", "a");
+```
+
+The `"a"` mode was selected because a new transaction should be added to the end of the file without deleting previous records.
+
+The program checks:
+
+```c
+if (fp != NULL)
+```
+
+to make sure the file opened successfully.
+
+`fprintf()` then writes the important transaction details, including:
+
+- Vehicle registration number
+- Vehicle type
+- Entry time
+- Exit time
+- Duration in minutes
+- Parking charge
+- Payment mode
+
+After writing, the file is closed using:
+
+```c
+fclose(fp);
+```
+
+### Reading Parking History
+
+The `viewHistory()` function opens the same file in read mode:
+
+```c
+fp = fopen("parking_records.txt", "r");
+```
+
+If `fp == NULL`, the file could not be opened, so the program displays that no parking history is available.
+
+Otherwise, the file is read one character at a time:
+
+```c
+while ((ch = fgetc(fp)) != EOF)
+{
+    printf("%c", ch);
+}
+```
+
+`EOF` means **End Of File**. The loop stops after the final stored character is read, and `fclose(fp)` closes the file.
+
+### Why this approach was used
+
+The active parking slots exist in memory only while the program is running. File handling allows **completed transactions** to remain available after a vehicle exits and demonstrates persistent storage without requiring a database.
+
+### C concepts demonstrated
+
+`FILE *` • `fopen()` • append mode `"a"` • read mode `"r"` • `fprintf()` • `fgetc()` • `EOF` • `NULL` checking • `fclose()`
+
+---
+
+# Example Program Output
+
+## Parking Status
+
+![Parking Status Output](screenshots/output_parking_status.png)
+
+### What the output shows
+
+This screen gives a complete snapshot of the current 10-slot parking area.
+
+Each row represents one slot. For an occupied slot, the program displays:
+
+- Slot number
+- `OCCUPIED` status
+- Vehicle registration number
+- Vehicle type
+- HH:MM entry time
+- FASTag availability
+
+For an empty slot, the status is shown as `AVAILABLE`.
+
+In the example screenshot:
+
+- **3 slots are occupied**
+- **7 slots are available**
+- **2 cars are parked**
+- **1 bike is parked**
+
+The totals are calculated while the program traverses the same array of `ParkingSlot` structures used for entry and exit.
+
+### What this proves
+
+The screenshot demonstrates that the program can maintain several vehicles simultaneously and correctly distinguish between occupied and available slots, vehicle types and FASTag status.
+
+---
+
+## Vehicle Exit and Parking Receipt
+
+![Vehicle Exit and Receipt](screenshots/output_vehicle_exit.png)
+
+### Step-by-step calculation
+
+The example vehicle is a **Car** that entered at `07:38` and exited at `19:55`.
+
+The program converts both times to minutes:
+
+```text
+07:38 = (7 x 60) + 38  = 458 minutes
+19:55 = (19 x 60) + 55 = 1195 minutes
+```
+
+Therefore:
+
+```text
+Duration = 1195 - 458
+         = 737 minutes
+         = 12 hr 17 min
+```
+
+Since a started hour is charged as a complete hour:
+
+```text
+Billable Hours = 13
+```
+
+For a Car:
+
+```text
+Rate   = Rs. 20/hour
+Charge = 13 x 20
+       = Rs. 260
+```
+
+The receipt therefore correctly displays **Rs. 260.00**.
+
+Because FASTag was selected during entry, the receipt shows:
+
+```text
+Payment Mode   : FASTag
+Payment Status : Successful (Simulated)
+```
+
+After the receipt is generated, the completed transaction is appended to `parking_records.txt` and the slot's `occupied` value is reset to `0`.
+
+### What this proves
+
+This single output demonstrates vehicle search, HH:MM time handling, duration calculation, started-hour billing, vehicle-type pricing, simulated payment selection, file storage and freeing of the parking slot.
+
+---
+
+## File Handling and Parking History
+
+Completed transactions are stored in `parking_records.txt`. Each stored record contains the vehicle number, vehicle type, entry time, exit time, duration in minutes, parking charge, and payment mode.
+
+The file is opened in append mode (`"a"`) when saving records so previous transactions are not overwritten. The Parking History option opens it in read mode (`"r"`) and displays the stored records.
+
+---
+
+## Test Cases
+
+| Test Case | Expected Result | Result |
+|---|---|---|
+| Normal Vehicle Entry | Vehicle assigned an available slot | PASS |
+| Duplicate Vehicle Entry | Duplicate entry rejected | PASS |
+| Car Parking Rate | Rs. 20/hour applied | PASS |
+| Bike Parking Rate | Rs. 10/hour applied | PASS |
+| HH:MM Time Calculation | Correct duration calculated | PASS |
+| FASTag Available | FASTag shown as payment mode | PASS |
+| FASTag Unavailable | Cash shown as payment mode | PASS |
+| Parking Full | `PARKING FULL` displayed | PASS |
+| Search Existing Vehicle | Vehicle details displayed | PASS |
+| File Record Storage | Transaction stored | PASS |
+| Parking History | Stored records displayed | PASS |
+
+---
+
+## Compilation and Execution
+
+### Clang
 
 ```bash
-clang smart_campus_parking.c -o smart_campus_parking
+clang smart_campus_parking.c -o parking
+./parking
 ```
 
-### Run
+### GCC
 
 ```bash
-./smart_campus_parking
+gcc smart_campus_parking.c -o parking
+./parking
 ```
 
 ---
 
-## 11. Test Cases
-
-| Test Case | Input | Expected Output | Actual Output | Result |
-|---|---|---|---|---|
-| Normal Vehicle Entry | `DL5CAB1234`, Entry: `10` | Vehicle parked successfully | Vehicle parked successfully | Pass |
-| Second Vehicle Entry | `UK07AB5678`, Entry: `12` | Vehicle assigned next available slot | Vehicle assigned next available slot | Pass |
-| Duplicate Entry | Enter `DL5CAB1234` again | Vehicle is already parked | Vehicle is already parked | Pass |
-| Search Existing Vehicle | Search `DL5CAB1234` | Vehicle details displayed | Vehicle details displayed | Pass |
-| Search Unknown Vehicle | Search `UP14XY9999` | Vehicle not found | Vehicle not found | Pass |
-| Normal Vehicle Exit | `DL5CAB1234`, Exit: `14` | Duration = 4 hours, Charge = Rs. 80 | Duration = 4 hours, Charge = Rs. 80 | Pass |
-| Invalid Entry Time | Entry: `27` | Invalid entry time | Invalid entry time | Pass |
-| Invalid Exit Time | Exit: `25` | Invalid exit time | Invalid exit time | Pass |
-| Exit Before Entry | Entry: `15`, Exit: `10` | Exit time cannot be earlier than entry time | Exit time cannot be earlier than entry time | Pass |
-| Parking Full | Attempt another entry after all 10 slots are occupied | PARKING FULL | PARKING FULL | Pass |
-
----
-
-## 12. Sample Output - Vehicle Entry
+## Project Structure
 
 ```text
---- VEHICLE ENTRY ---
-
-Enter vehicle registration number: DL5CAB1234
-Enter entry time (0-23): 10
-
-Vehicle parked successfully!
-Vehicle Number : DL5CAB1234
-Parking Slot   : 1
-Entry Time     : 10:00
+Batch43_TeamRocket_SmartCampusParking/
+|
+|-- README.md
+|-- smart_campus_parking.c
+|-- parking_records.txt
+|-- flowchart.png
+|-- presentation.pptx
+|
+`-- screenshots/
+    |-- code_main_menu.png
+    |-- code_vehicle_entry.png
+    |-- code_charge_calculation.png
+    |-- code_file_handling.png
+    |-- output_parking_status.png
+    `-- output_vehicle_exit.png
 ```
 
 ---
 
-## 13. Sample Output - Search Vehicle
+## Limitations
 
-```text
---- SEARCH VEHICLE ---
-
-Enter vehicle registration number: DL5CAB1234
-
-Vehicle found!
-Vehicle Number : DL5CAB1234
-Parking Slot   : 1
-Entry Time     : 10:00
-Status         : Parked
-```
+- The prototype uses a fixed capacity of 10 parking slots.
+- Current occupied-slot data resets when the program closes.
+- Only completed transactions are permanently stored in the text file.
+- Entry and exit are assumed to occur on the same day.
+- FASTag payment is simulated.
+- The system is terminal-based and does not use physical parking sensors.
 
 ---
 
-## 14. Sample Output - Vehicle Exit
+## Conclusion
 
-```text
---- VEHICLE EXIT ---
-
-Enter vehicle registration number: DL5CAB1234
-Entry Time: 10:00
-Enter exit time (0-23): 14
-
-========== PARKING RECEIPT ==========
-Vehicle Number : DL5CAB1234
-Parking Slot   : 1
-Entry Time     : 10:00
-Exit Time      : 14:00
-Duration       : 4 hour(s)
-Parking Charge : Rs. 80.00
-=====================================
-Vehicle exited successfully!
-```
+The Smart Campus Parking System demonstrates how fundamental C programming concepts can be combined into a practical application. It manages vehicle entry and exit, tracks parking availability, supports separate Car and Bike rates, calculates HH:MM-based parking duration, prevents duplicate entries, provides a simulated FASTag/Cash workflow, and stores completed transactions using C file handling.
 
 ---
 
-## 15. Sample Output - Parking Status
-
-```text
-========== PARKING STATUS ==========
-
-Slot 1 : OCCUPIED - DL5CAB1234
-Slot 2 : OCCUPIED - UK07AB5678
-Slot 3 : AVAILABLE
-Slot 4 : AVAILABLE
-Slot 5 : AVAILABLE
-Slot 6 : AVAILABLE
-Slot 7 : AVAILABLE
-Slot 8 : AVAILABLE
-Slot 9 : AVAILABLE
-Slot 10 : AVAILABLE
-
-------------------------------------
-Total Slots     : 10
-Occupied Slots  : 2
-Available Slots : 8
-====================================
-```
-
----
----
-
-## 16. Program Flowchart
-
-The following flowchart represents the overall working of the Smart Campus Parking System.
-
-![Smart Campus Parking System Flowchart](Flowchart.png)
-
----
-
-## 17. Project Files
-
-- [View Program Flowchart](Flowchart.png)
-- [Download Project Presentation](Presentation.pptx)
-
----
-## 18. Limitations
-
-The current program is designed as a simple first-year C programming project.
-
-- Parking information is stored only while the program is running.
-- Data is not saved permanently after the program is closed.
-- Time is represented using whole hours from `0` to `23`.
-- The program assumes that vehicle entry and exit occur on the same day.
-- The system uses a fixed parking rate of Rs. 20 per hour.
-
----
-
-## 19. Conclusion
-
-The Smart Campus Parking System demonstrates how fundamental C programming concepts can be applied to a practical campus parking problem.
-
-The program manages vehicle entry and exit, prevents duplicate entries, detects a full parking area, searches for parked vehicles, calculates parking charges, and displays parking availability.
-
-The project uses structures, arrays, strings, loops, conditional statements, functions, and menu-driven programming to provide a simple and functional parking management solution.
-
----
-
-## Team Rocket
-
-**Batch 43**
-
-| Team Member | SAP ID |
-|---|---|
-| Lakshya Garg | 590039884 |
-| Nishchal Khatri | 590038447 |
-| Sanskar Singh | 590038463 |
+**Team Rocket | Batch 43**  
+**Lakshya Garg | Nishchal Khati | Sanskar Singh**
+Smart_Campus_Parking_Whiteboard_FINAL
